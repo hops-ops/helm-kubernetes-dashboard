@@ -1,0 +1,13 @@
+apiVersion: helm.hops.ops.com.ai/v1alpha1
+kind: KubernetesDashboard
+metadata:
+  name: kubernetes-dashboard
+  namespace: example-env
+spec:
+  clusterName: example-cluster
+  labels:
+    team: platform
+  values:
+    app:
+      ingress:
+        enabled: false

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: helm-kubernetes-dashboard
+description: Deploy helm-kubernetes-dashboard Crossplane configuration
+type: application
+version: 0.1.0
+appVersion: 7.14.0

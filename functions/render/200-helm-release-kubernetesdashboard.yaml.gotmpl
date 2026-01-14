@@ -1,0 +1,34 @@
+# code: language=yaml
+{{- $kd := $state.kubernetesdashboard }}
+
+---
+apiVersion: helm.m.crossplane.io/v1beta1
+kind: Release
+metadata:
+  name: {{ $kd.releaseName }}
+  annotations:
+    {{ setResourceNameAnnotation "helm-release-kubernetesdashboard" }}
+  labels: {{ $kd.labels | toJson }}
+spec:
+  managementPolicies: {{ $kd.managementPolicies | toJson }}
+  forProvider:
+    chart:
+      name: kubernetes-dashboard
+      repository: https://kubernetes.github.io/dashboard/
+      version: 7.14.0
+    namespace: {{ $kd.namespace }}
+    {{- if $kd.overrideAllValues }}
+    values:
+      {{- toYaml $kd.overrideAllValues | nindent 6 }}
+    {{- else }}
+    values:
+      fullnameOverride: kubernetes-dashboard
+      nameOverride: kubernetes-dashboard
+      {{- if $kd.values }}
+      {{- toYaml $kd.values | nindent 6 }}
+      {{- end }}
+    {{- end }}
+  rollbackLimit: 3
+  providerConfigRef:
+    name: {{ $kd.providerConfigRef.name }}
+    kind: {{ $kd.providerConfigRef.kind }}
